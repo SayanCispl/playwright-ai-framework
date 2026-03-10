@@ -8,6 +8,7 @@
 ![Playwright](https://img.shields.io/badge/Playwright-Python-orange)
 ![Docker](https://img.shields.io/badge/docker-ready-lightblue)
 ![GitHub](https://img.shields.io/badge/version-control-git-black)
+
 ```---
 
 ## 📖 Overview
