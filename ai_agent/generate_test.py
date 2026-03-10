@@ -1,9 +1,9 @@
 def generate_login_test():
     return '''
 def test_login(page):
-    page.goto("https://demo.playwright.dev/login")
-    page.fill("#username", "user")
-    page.fill("#password", "pass")
+    page.goto("https://automationexercise.com/login")
+    page.fill("#username", "test_t101@yopmail.com")
+    page.fill("#password", "Test@123")
     page.click("text=Login")
-    assert page.url == "https://demo.playwright.dev/dashboard"
+    assert page.url == "https://automationexercise.com/dashboard"
 '''
