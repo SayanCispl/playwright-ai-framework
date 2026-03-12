@@ -1,22 +1,35 @@
 from playwright.sync_api import Page
 from config.config import Config
 
+
 class LoginPage:
     def __init__(self, page: Page):
         self.page = page
-        # Using provided XPaths
-        self.email_input = "//input[@data-qa='login-email']"
-        self.password_input = "//input[@data-qa='login-password']"
-        self.login_button = "//button[@data-qa='login-button']"
 
-    def navigate(self):
+    def navigate(self) -> None:
+        """
+        Navigate to the login page.
+        """
         self.page.goto(Config.LOGIN_URL)
 
-    def login(self, username: str = Config.USERNAME, password: str = Config.PASSWORD):
-        self.page.fill(self.email_input, username)
-        self.page.fill(self.password_input, password)
-        self.page.click(self.login_button)
+    def login(self, username: str = Config.USERNAME, password: str = Config.PASSWORD) -> None:
+        """
+        Perform login with the given credentials.
+
+        Args:
+            username (str): The username to log in with.
+            password (str): The password to log in with.
+        """
+        self.page.fill("[data-qa='login-email']", username)
+        self.page.fill("[data-qa='login-password']", password)
+        self.page.click("[data-qa='login-button']")
+        self.page.wait_for_url(f"**{Config.DASHBOARD_URL}**")  # Wait for navigation to dashboard
 
     def is_logged_in(self) -> bool:
-        # After login, check if redirected to home/dashboard
+        """
+        Check if the user is logged in by verifying the current URL.
+
+        Returns:
+            bool: True if logged in, False otherwise.
+        """
         return self.page.url.startswith(Config.DASHBOARD_URL)

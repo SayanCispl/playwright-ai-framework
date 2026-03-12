@@ -1,4 +1,7 @@
 pytest
-pytest-html
 pytest-playwright
+allure-pytest
+requests
+
 playwright
+allure-python-commons

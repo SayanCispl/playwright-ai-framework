@@ -1,5 +1,21 @@
+# Python
 __pycache__/
-.env
-*.log
+*.pyc
+*.pyo
+
+# Virtualenv
+.venv/
+env/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Reports
 reports/
-screenshots/
+allure-results/
+allure-report/
+
+# Docker
+*.log

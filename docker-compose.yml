@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  ecommerce:
+    build: .
+    container_name: ecommerce_app
+    command: ["python", "ecommerce/app.py"]
+    ports:
+      - "8000:8000"
+
+  mcp:
+    build: .
+    container_name: mcp_server
+    command: ["python", "mcp_server/server.py"]
+    ports:
+      - "8001:8001"
+
+  tests:
+    build: .
+    container_name: playwright_tests
+    depends_on:
+      - ecommerce
+      - mcp

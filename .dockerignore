@@ -1,0 +1,36 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+.venv/
+env/
+venv/
+
+# Ignore IDE/project settings
+.idea/
+.vscode/
+
+# Ignore logs, reports, screenshots
+logs/
+reports/
+screenshots/
+allure-results/
+allure-report/
+
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore Docker files themselves
+Dockerfile
+docker-compose.yml
+
+# Ignore OS/system files
+*.log
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
