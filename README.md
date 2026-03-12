@@ -1,17 +1,17 @@
-# Playwright AI-Assisted QA Framework 🚀
+Playwright AI Framework with MCP Server & Allure Reporting ⚡
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pytest](https://img.shields.io/badge/tested_with-pytest-green)
 ![Playwright](https://img.shields.io/badge/Playwright-Python-orange)
 ![Docker](https://img.shields.io/badge/docker-ready-lightblue)
-![GitHub](https://img.shields.io/badge/version-control-git-black)
 
 
 ```---
 
 ## 📖 Overview
 
-This project is a **hybrid QA automation framework** combining:
+A modern QA automation framework built with Python + Playwright + Pytest, enhanced by Allure reporting and a mock MCP (Model Context Protocol) server simulating AI agent integration.
+This project demonstrates end‑to‑end automation workflows: Page Object Model (POM), parallel execution, evidence capture, and AI‑driven test case generation.
 
 - **Playwright CLI** for browser automation and test execution
 - **Pytest** for structured test cases
@@ -23,104 +23,107 @@ It demonstrates **login, add-to-cart, and checkout flows** on a demo website, wi
 
 ---
 
-## 🔀 Hybrid Framework Concept: CLI + AI Agent
+📂 Project Structure
+playwright_ai_framework/
+├── config/                # Configuration package
+│   ├── __init__.py
+│   └── config.py          # Base URLs, credentials, paths
+├── pages/                 # Page Object Models (Login, Cart, Checkout)
+├── tests/                 # Pytest test suites with Allure steps
+├── mcp_server/            # Mock AI MCP server
+│   └── server.py
+├── logs/                  # Test run logs
+├── reports/               # Allure raw results
+├── screenshots/           # Captured evidence
+├── main.py                # Entry point (server/tests/both)
+└── pytest.ini             # Pytest markers & config
 
-The framework is designed to balance **efficiency** and **intelligence**:
+🤖 MCP Server & AI Agent Integration
+The MCP server (mcp_server/server.py) simulates an AI agent that can generate test cases or respond to QA prompts.
+Endpoint:  
+POST http://localhost:8001/v1/chat/completions
+Sample Request:
+curl -X POST http://127.0.0.1:8001/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"demo","messages":[{"role":"user","content":"Generate login test cases"}],"max_tokens":800}'
+Sample Response:
+{
+  "choices": [
+    {
+      "message": {
+        "content": "Mock AI Agent: Generated test cases for -> Generate login test cases"
+      }
+    }
+  ]
+}
+This allows you to plug AI‑driven test generation into your QA workflow. In CI/CD, the MCP server can be used to dynamically generate or validate test scenarios before execution.
 
-- **AI Agent Layer**
+📊 Allure Reporting (Enhanced)
+Allure transforms raw pytest results into a visual dashboard with:
 
-  - Generates new test cases (e.g., login, checkout) using natural language prompts.
-  - Adapts existing tests when requirements change.
-  - Consumes tokens only during generation/adaptation.
-  - Example: “Generate a login test” → AI outputs a ready‑to‑run Pytest script.
-- **Playwright CLI Layer**
+Features & Stories → group tests by functionality (Authentication, Cart, Checkout).
 
-  - Executes tests locally or in CI/CD pipelines.
-  - Produces logs, screenshots, and HTML reports.
-  - No token usage during execution.
-  - Example: `pytest tests/ --html=reports/test-report.html`
+Severity Levels → highlight importance (BLOCKER, CRITICAL, NORMAL).
 
-**Workflow:**
+Step Breakdown → login → add to cart → checkout flows.
 
-1. AI Agent scaffolds or adapts test code.
-2. Developer commits generated tests to GitHub.
-3. Playwright CLI runs tests in Docker or CI/CD.
-4. Reports and screenshots are shared with stakeholders.
+Evidence Attachments → screenshots, URLs, JSON payloads.
 
-This hybrid model ensures **cost‑efficient execution** while leveraging AI for **rapid test creation**.
+Failure Evidence → automatic screenshots on test failure.
 
-```
+⚙️ Running Locally
+1. Setup environment
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+playwright install
 
----
+2. Start MCP server
+python mcp_server/server.py
 
-## 🧱 Project Structure
+3. Run tests (desktop only, parallel)
+pytest -m desktop -n auto --alluredir=reports/
 
-playwright\_ai\_framework/
+4. View Allure report
+allure serve reports/
 
-├── config/            # Config files
+🐳 Run with Docker
+docker-compose up --build
 
-├── tests/             # Pytest test cases
+MCP server runs on http://localhost:8001
 
-├── pages/             # Page Object Model classes
+Playwright tests run in a separate container
 
-├── utils/             # Logger & screenshot helpers
+Reports generated in reports/
 
-├── ai\_agent/          # AI-assisted test generation
+🚀 Usage via main.py
+python main.py
 
-├── reports/           # HTML reports
+Options:
 
-├── logs/              # Execution logs
+Run MCP server
 
-├── Dockerfile         # Container setup
+Run tests
 
-├── requirements.txt   # Dependencies
+Run MCP server + tests together (multiprocessing)
 
-├── .gitignore         # Git ignore rules
+🛠️ Optimized Parallel Execution
+Only desktop tests run in parallel (-m desktop).
 
-└── README.md          # Project documentation
+Mobile tests are commented out in pytest.ini and test files.
 
----
+Use -n auto to maximize CPU utilization.
 
-## ⚙️ Setup
+✅ Next Steps
+Add CI/CD pipeline (GitHub Actions) to auto‑run tests and publish Allure reports.
 
-### 1. Clone the repo
+Re‑enable mobile tests when device/browser matrix is ready.
 
-```bash
-git clone https://github.com/<your-username>/playwright-ai-framework.git
-cd playwright_ai_framework
----
+Extend config/ for environment‑specific configs (dev, staging, prod).
 
-2. Install dependencies
+Integrate MCP server with real AI agents for dynamic test generation.
 
-   pip install -r requirements.txt
-   playwright install
-3. Run tests
-
-   pytest tests/ --headed --html=reports/test-report.html
-4. 🐳 Docker Usage
-
-### Build image
-
-docker build -t playwright-ai-framework .
-
-Run tests inside container
-
-docker run --rm playwright-ai-framework
-
-📸 Logs & Screenshots
-
-* **Logs** → `logs/test_run.log`
-* **Screenshots** → `screenshots/`
-* **Reports** → `reports/test-report.html`
-
-## 📌 Roadmap
-
-* [ ]  Integrate Allure reports
-* [ ]  Add CI/CD pipeline (GitHub Actions)
-* [ ]  Expand test coverage (search, profile update)
-* [ ]  AI-assisted test adaptation
-
-
+👉 This README now explains MCP server AI agent integration in detail, shows how Allure captures evidence, and highlights parallel execution optimizations.
 
 ## 👤 Author
 
