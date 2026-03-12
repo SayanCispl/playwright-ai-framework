@@ -5,9 +5,6 @@ Playwright AI Framework with MCP Server & Allure Reporting ⚡
 ![Playwright](https://img.shields.io/badge/Playwright-Python-orange)
 ![Docker](https://img.shields.io/badge/docker-ready-lightblue)
 
-
-```---
-
 ## 📖 Overview
 
 A modern QA automation framework built with Python + Playwright + Pytest, enhanced by Allure reporting and a mock MCP (Model Context Protocol) server simulating AI agent integration.
@@ -40,21 +37,21 @@ playwright_ai_framework/
 
 🤖 MCP Server & AI Agent Integration
 The MCP server (mcp_server/server.py) simulates an AI agent that can generate test cases or respond to QA prompts.
-Endpoint:  
+Endpoint:
 POST http://localhost:8001/v1/chat/completions
 Sample Request:
-curl -X POST http://127.0.0.1:8001/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{"model":"demo","messages":[{"role":"user","content":"Generate login test cases"}],"max_tokens":800}'
+curl -X POST http://127.0.0.1:8001/v1/chat/completions 
+-H "Content-Type: application/json" 
+-d '{"model":"demo","messages":[{"role":"user","content":"Generate login test cases"}],"max_tokens":800}'
 Sample Response:
 {
-  "choices": [
-    {
-      "message": {
-        "content": "Mock AI Agent: Generated test cases for -> Generate login test cases"
-      }
-    }
-  ]
+"choices": [
+{
+"message": {
+"content": "Mock AI Agent: Generated test cases for -> Generate login test cases"
+}
+}
+]
 }
 This allows you to plug AI‑driven test generation into your QA workflow. In CI/CD, the MCP server can be used to dynamically generate or validate test scenarios before execution.
 
@@ -72,20 +69,18 @@ Evidence Attachments → screenshots, URLs, JSON payloads.
 Failure Evidence → automatic screenshots on test failure.
 
 ⚙️ Running Locally
+
 1. Setup environment
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-playwright install
-
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   playwright install
 2. Start MCP server
-python mcp_server/server.py
-
+   python mcp_server/server.py
 3. Run tests (desktop only, parallel)
-pytest -m desktop -n auto --alluredir=reports/
-
+   pytest -m desktop -n auto --alluredir=reports/
 4. View Allure report
-allure serve reports/
+   allure serve reports/
 
 🐳 Run with Docker
 docker-compose up --build
@@ -121,16 +116,12 @@ Re‑enable mobile tests when device/browser matrix is ready.
 
 Extend config/ for environment‑specific configs (dev, staging, prod).
 
-Integrate MCP server with real AI agents for dynamic test generation.
-
 👉 This README now explains MCP server AI agent integration in detail, shows how Allure captures evidence, and highlights parallel execution optimizations.
 
 ## 👤 Author
 
 Sayan Koley — QA Automation Specialist. Persistent, practical, and focused on recruiter‑ready frameworks.
 
-
 ## 📜 License
 
 MIT License – free to use and adapt.
-```
