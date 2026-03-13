@@ -7,22 +7,21 @@ class CartPage:
         self.page = page
         self.add_to_cart_button = "(//a[contains(text(),'Add to cart')])[1]"
         self.view_cart_button = "a[href='/view_cart']"
+        # Add selector for the product container
+        self.first_product = ".product-image-wrapper:first-of-type"  # or ".single-products:first-of-type"
 
     def navigate(self):
         self.page.goto(Config.SHOP_URL)
 
     def add_item_to_cart(self):
-        # Locate the button
-        add_to_cart = self.page.locator(self.add_to_cart_button)
+        # Hover the product container (not the button) to trigger the overlay
+        self.page.hover(self.first_product)
 
-        # Hover to reveal the overlay (triggers the hover effect)
-        add_to_cart.hover()
+        # Wait for the overlay animation
+        self.page.wait_for_timeout(500)
 
-        # Wait for hover animation to complete (300ms is usually enough)
-        self.page.wait_for_timeout(300)
-
-        # Now click the button
-        add_to_cart.click()
+        # Now click with force to bypass any remaining blocking
+        self.page.locator(self.add_to_cart_button).click(force=True)
 
         # Rest of the flow
         self.page.wait_for_selector(self.view_cart_button)
