@@ -24,6 +24,23 @@ def allure_environment_setup():
         f.write("Browser=Chromium / Firefox / WebKit\n")
         f.write("Framework=pytest-playwright\n")
 
+# Disable animations globally for all tests to improve stability and speed.
+@pytest.fixture(autouse=True)
+def setup_page(page):
+    # Disable CSS animations/transitions in CI
+    page.add_init_script("""
+        document.addEventListener('DOMContentLoaded', () => {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                *, *::before, *::after {
+                    animation-duration: 0s !important;
+                    transition-duration: 0s !important;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    """)
+
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """
