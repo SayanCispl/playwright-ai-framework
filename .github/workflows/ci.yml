@@ -1,15 +1,12 @@
 # ---------------------------------------------------------
-# GitHub Actions Workflow: Playwright Cross-OS + Browser Tests
+# GitHub Actions Workflow: Playwright Cross-Browser Tests (Ubuntu Only)
 # ---------------------------------------------------------
-# This workflow runs Playwright tests across multiple operating systems
-# (Ubuntu, Windows, macOS) and browsers (Chromium, Firefox, WebKit).
-# Results are collected and merged into a single Allure report,
-# which is then published to GitHub Pages.
+# Runs Playwright tests on Ubuntu across 3 browsers: Chromium, Firefox, WebKit
+# Results are collected and merged into a single Allure report published to GitHub Pages.
 # ---------------------------------------------------------
 
-name: Playwright Cross-OS + Browser Tests
+name: Playwright Cross-Browser Tests (Ubuntu)
 
-# Trigger workflow on pushes and pull requests to main branch
 on:
   push:
     branches: [ main ]
@@ -18,12 +15,11 @@ on:
 
 jobs:
   test:
-    # Run tests in parallel across OS and browsers
+    # Run tests only on Ubuntu with 3 browsers
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]   # OS matrix
-        browser: [chromium, firefox, webkit]                # Browser matrix
-    runs-on: ${{ matrix.os }}
+        browser: [chromium, firefox, webkit]
+    runs-on: ubuntu-latest
 
     steps:
       # Step 1: Checkout repo code
@@ -42,27 +38,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Install Playwright browsers
-      - name: Install Playwright browsers (Ubuntu)
-        if: matrix.os == 'ubuntu-latest'
+      # Step 4: Install Playwright browsers with system dependencies
+      - name: Install Playwright browsers
         run: python -m playwright install --with-deps
 
-      - name: Install Playwright browsers (Windows/macOS)
-        if: matrix.os != 'ubuntu-latest'
-        run: python -m playwright install
-
       # Step 5: Run tests with pytest + Allure
-      # Browser is passed from matrix (chromium, firefox, webkit).
-      # Headless mode is default in CI runners.
       - name: Run tests
         run: pytest --browser=${{ matrix.browser }} --alluredir=reports/
 
       # Step 6: Upload Allure results as artifact
-      # Artifact name includes OS + browser for uniqueness.
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ matrix.os }}-${{ matrix.browser }}
+          name: allure-results-${{ matrix.browser }}
           path: reports/
 
   merge-and-publish:
@@ -75,7 +63,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Download all artifacts (OS + browser results)
+      # Step 2: Download all artifacts (browser results)
       - name: Download Allure results
         uses: actions/download-artifact@v4
         with:
@@ -94,7 +82,6 @@ jobs:
           allure generate merged-results/all -o allure-report --clean
 
       # Step 5: Deploy unified report to GitHub Pages
-      # Publishes dashboard at https://<username>.github.io/<repo>/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
