@@ -43,8 +43,12 @@ jobs:
           pip install -r requirements.txt
 
       # Step 4: Install Playwright browsers
-      # NOTE: Do NOT use --with-deps (Linux-only). This works cross-OS.
-      - name: Install Playwright browsers
+      - name: Install Playwright browsers (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: python -m playwright install --with-deps
+
+      - name: Install Playwright browsers (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
         run: python -m playwright install
 
       # Step 5: Run tests with pytest + Allure
