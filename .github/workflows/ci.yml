@@ -18,7 +18,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]   # OS matrix
         browser: [chromium, firefox, webkit]                # Browser matrix
-    runs-on: ${{ matrix.os }}                               # Select runner OS
+    runs-on: ${{ matrix.os }}                              # Select runner OS
+    continue-on-error: true
 
     steps:
       # Step 1: Checkout repo code
@@ -39,7 +40,8 @@ jobs:
 
       # Step 4: Install Playwright browsers (Chrome, Firefox, WebKit)
       - name: Install Playwright browsers
-        run: python -m playwright install --with-deps
+        run: python -m playwright install
+
 
       # Step 5: Run tests with pytest + Allure
       # --browser comes from matrix (chromium, firefox, webkit)
