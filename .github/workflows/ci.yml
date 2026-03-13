@@ -1,9 +1,15 @@
 # ---------------------------------------------------------
-# GitHub Actions Workflow: Playwright Cross-OS Tests + Allure
+# GitHub Actions Workflow: Playwright Cross-OS + Browser Tests
+# ---------------------------------------------------------
+# This workflow runs Playwright tests across multiple operating systems
+# (Ubuntu, Windows, macOS) and browsers (Chromium, Firefox, WebKit).
+# Results are collected and merged into a single Allure report,
+# which is then published to GitHub Pages.
 # ---------------------------------------------------------
 
-name: Playwright Cross-OS Tests
+name: Playwright Cross-OS + Browser Tests
 
+# Trigger workflow on pushes and pull requests to main branch
 on:
   push:
     branches: [ main ]
@@ -12,10 +18,11 @@ on:
 
 jobs:
   test:
-    # Run tests in parallel across OS (browser matrix handled by pytest.ini)
+    # Run tests in parallel across OS and browsers
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]   # OS matrix only
+        os: [ubuntu-latest, windows-latest, macos-latest]   # OS matrix
+        browser: [chromium, firefox, webkit]                # Browser matrix
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -36,21 +43,22 @@ jobs:
           pip install -r requirements.txt
 
       # Step 4: Install Playwright browsers
-      # (--with-deps is Linux-specific, so we use plain install for cross-OS)
+      # NOTE: Do NOT use --with-deps (Linux-only). This works cross-OS.
       - name: Install Playwright browsers
         run: python -m playwright install
 
       # Step 5: Run tests with pytest + Allure
-      # Browser selection is handled by pytest.ini (addopts = --browser=all)
+      # Browser is passed from matrix (chromium, firefox, webkit).
+      # Headless mode is default in CI runners.
       - name: Run tests
-        run: pytest --alluredir=reports/
+        run: pytest --browser=${{ matrix.browser }} --alluredir=reports/
 
       # Step 6: Upload Allure results as artifact
-      # Artifact name includes OS for uniqueness
+      # Artifact name includes OS + browser for uniqueness.
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ matrix.os }}
+          name: allure-results-${{ matrix.os }}-${{ matrix.browser }}
           path: reports/
 
   merge-and-publish:
@@ -63,7 +71,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Download all artifacts (OS results)
+      # Step 2: Download all artifacts (OS + browser results)
       - name: Download Allure results
         uses: actions/download-artifact@v4
         with:
