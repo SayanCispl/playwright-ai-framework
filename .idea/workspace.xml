@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a08b3cae-74a7-48bf-bcb0-5bb87434a2ce" name="Changes" comment="" />
+    <list default="true" id="a08b3cae-74a7-48bf-bcb0-5bb87434a2ce" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/pages/cart_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/cart_page.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -204,6 +206,16 @@
       <updated>1773137450172</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pages/checkout_page.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

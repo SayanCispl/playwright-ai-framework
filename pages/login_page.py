@@ -11,6 +11,7 @@ class LoginPage:
         Navigate to the login page.
         """
         self.page.goto(Config.LOGIN_URL)
+        self.page.wait_for_load_state("networkidle")
 
     def login(self, username: str = Config.USERNAME, password: str = Config.PASSWORD) -> None:
         """
@@ -20,10 +21,16 @@ class LoginPage:
             username (str): The username to log in with.
             password (str): The password to log in with.
         """
+        # Wait for login form to be ready
+        self.page.wait_for_selector("[data-qa='login-email']", state="visible")
+
         self.page.fill("[data-qa='login-email']", username)
         self.page.fill("[data-qa='login-password']", password)
         self.page.click("[data-qa='login-button']")
-        self.page.wait_for_url(f"**{Config.DASHBOARD_URL}**")  # Wait for navigation to dashboard
+
+        # Wait for navigation to dashboard
+        self.page.wait_for_url(f"**{Config.DASHBOARD_URL}**")
+        self.page.wait_for_load_state("networkidle")
 
     def is_logged_in(self) -> bool:
         """
