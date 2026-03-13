@@ -1,58 +1,21 @@
-import platform
-import allure
 import pytest
-from playwright.sync_api import sync_playwright
+import allure
 
-@pytest.fixture
-def page(request):
-    with sync_playwright() as p:
-        # Desktop flow
-        if request.node.get_closest_marker("desktop"):
-            browser_name = request.config.getoption("--browser") or "chromium"
-            browser = getattr(p, browser_name).launch(headless=True)
-            context = browser.new_context()
-            page = context.new_page()
-            yield page
-            browser.close()
-
-        # Mobile flow
-        elif request.node.get_closest_marker("mobile"):
-            device_name = request.config.getoption("--device") or "iPhone 12"
-            try:
-                device = p.devices[device_name]
-            except KeyError:
-                raise ValueError(f"Device '{device_name}' not found in Playwright presets.")
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(**device)
-            page = context.new_page()
-            yield page
-            browser.close()
-
-        else:
-            raise ValueError("Test must be marked with either @pytest.mark.desktop or @pytest.mark.mobile")
+def pytest_configure(config):
+    """
+    Register custom markers so pytest doesn't complain.
+    """
+    config.addinivalue_line("markers", "desktop: run test on desktop browsers")
+    config.addinivalue_line("markers", "mobile: run test on mobile devices")
 
 @pytest.fixture(autouse=True)
-def add_suite_hierarchy(request):
-    # OS detection
-    os_name = platform.system()
-    if os_name == "Darwin":
-        os_name = "macOS"
-
-    # Browser detection
-    browser_name = request.config.getoption("--browser", default="chromium")
-    if browser_name == "chromium":
-        browser_label = "Chrome"
-    elif browser_name == "firefox":
-        browser_label = "Firefox"
-    elif browser_name == "webkit":
-        browser_label = "WebKit"
-    else:
-        browser_label = browser_name
-
-    # Labels for filtering
-    allure.dynamic.label("os", os_name)
-    allure.dynamic.label("browser", browser_label)
-
-    # Suite hierarchy: OS-Browser
-    suite_name = f"{os_name}-{browser_label}"
-    allure.dynamic.parent_suite(suite_name)
+def allure_environment():
+    """
+    Attach environment info to Allure reports.
+    This runs automatically for every test.
+    """
+    allure.environment(
+        OS="Cross-OS (Ubuntu, Windows, macOS)",
+        Browser="Chromium / Firefox / WebKit",
+        Framework="pytest-playwright",
+    )
