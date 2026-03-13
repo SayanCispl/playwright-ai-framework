@@ -1,0 +1,94 @@
+# ---------------------------------------------------------
+# GitHub Actions Workflow: Playwright Cross-OS + Browser Tests
+# ---------------------------------------------------------
+
+name: Playwright Cross-OS + Browser Tests
+
+# Trigger workflow on pushes and pull requests to main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    # Run tests in parallel across OS and browser combinations
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]   # OS matrix
+        browser: [chromium, firefox, webkit]                # Browser matrix
+    runs-on: ${{ matrix.os }}                               # Select runner OS
+
+    steps:
+      # Step 1: Checkout repo code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Python environment
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Step 3: Install Python dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Install Playwright browsers (Chrome, Firefox, WebKit)
+      - name: Install Playwright browsers
+        run: python -m playwright install --with-deps
+
+      # Step 5: Run tests with pytest + Allure
+      # --browser comes from matrix (chromium, firefox, webkit)
+      # --alluredir saves raw results for later merging
+      - name: Run tests
+        run: pytest tests --browser=${{ matrix.browser }} --alluredir=reports/
+
+      # Step 6: Upload Allure results as artifact
+      # Artifact name includes OS + browser for uniqueness
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.os }}-${{ matrix.browser }}
+          path: reports/
+
+  merge-and-publish:
+    # This job runs after all test jobs finish
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Download all artifacts (OS+browser results)
+      - name: Download Allure results
+        uses: actions/download-artifact@v4
+        with:
+          path: merged-results
+
+      # Step 3: Merge results into one folder
+      # Copies all OS+browser results into merged-results/all
+      - name: Merge Allure results
+        run: |
+          mkdir -p merged-results/all
+          cp -r merged-results/*/* merged-results/all/ || true
+
+      # Step 4: Generate unified Allure HTML report
+      # Converts raw results into a browsable dashboard
+      - name: Generate Allure HTML report
+        run: |
+          pip install allure-pytest allure-python-commons
+          allure generate merged-results/all -o allure-report --clean
+
+      # Step 5: Deploy unified report to GitHub Pages
+      # Publishes dashboard at https://<username>.github.io/<repo>/
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report

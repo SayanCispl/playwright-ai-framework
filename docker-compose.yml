@@ -1,22 +1,40 @@
-version: "3.9"
-services:
-  ecommerce:
-    build: .
-    container_name: ecommerce_app
-    command: ["python", "ecommerce/app.py"]
-    ports:
-      - "8000:8000"
+# ---------------------------------------------------------
+# docker-compose.yml for Playwright + Copilot QA Framework
+# ---------------------------------------------------------
 
-  mcp:
+version: "3.9"
+
+services:
+  # 🧠 MCP Server (GitHub Copilot Agent Bridge)
+  mcp_server:
     build: .
     container_name: mcp_server
-    command: ["python", "mcp_server/server.py"]
     ports:
-      - "8001:8001"
+      - "8001:8001"        # Expose MCP server port for Copilot integration
+    volumes:
+      - .:/app             # Mount project files into container
+    command: python mcp_server/server.py
+    restart: always        # Auto-restart if container stops
 
+  # 🧪 Playwright Tests (UI + API)
   tests:
     build: .
     container_name: playwright_tests
+    volumes:
+      - .:/app             # Mount project files into container
     depends_on:
-      - ecommerce
-      - mcp
+      - mcp_server         # Ensure MCP server is running before tests
+    command: pytest tests --alluredir=reports/
+    # You can override this command to run specific test suites, e.g.:
+    # command: pytest tests/test_api.py --alluredir=reports/
+
+  # 📊 Allure Report Viewer (optional)
+  allure:
+    image: frankescobar/allure-docker-service
+    container_name: allure_report
+    ports:
+      - "8080:8080"        # Access Allure UI at http://localhost:8080
+    volumes:
+      - ./reports:/app/allure-results   # Mount test results
+    depends_on:
+      - tests
