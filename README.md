@@ -1,4 +1,4 @@
-Playwright AI Framework with MCP Server, API, GitHub Copilot & Allure Reporting ⚡
+🚀 AI‑Powered QA Automation: Playwright meets GitHub Copilot for smarter, faster testing.
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pytest](https://img.shields.io/badge/tested_with-pytest-green)
