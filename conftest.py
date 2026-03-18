@@ -25,9 +25,25 @@ def allure_environment_setup():
         f.write("Framework=pytest-playwright\n")
 
 # Disable animations globally for all tests to improve stability and speed.
+# Also block ads to prevent overlapping during click actions.
 @pytest.fixture(autouse=True)
 def setup_page(page):
-    # Disable CSS animations/transitions in CI
+    # Route to abort ad requests
+    blocked_domains = [
+        "doubleclick.net",
+        "googlesyndication.com",
+        "adservice.google.com",
+        "googletagservices.com"
+    ]
+    def handle_route(route):
+        if any(domain in route.request.url for domain in blocked_domains):
+            route.abort()
+        else:
+            route.fallback()
+
+    page.route("**/*", handle_route)
+
+    # Disable CSS animations/transitions in CI and hide ad elements
     page.add_init_script("""
         document.addEventListener('DOMContentLoaded', () => {
             const style = document.createElement('style');
@@ -35,6 +51,12 @@ def setup_page(page):
                 *, *::before, *::after {
                     animation-duration: 0s !important;
                     transition-duration: 0s !important;
+                }
+                iframe[id^="aswift"],
+                iframe[name^="aswift"],
+                ins.adsbygoogle,
+                div[id^="google_ads"] {
+                    display: none !important;
                 }
             `;
             document.head.appendChild(style);
