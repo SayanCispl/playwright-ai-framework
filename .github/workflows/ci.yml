@@ -9,9 +9,9 @@ name: Playwright Tests (Chromium + WebKit)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: write
