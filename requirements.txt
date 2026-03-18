@@ -4,3 +4,4 @@ allure-pytest
 requests
 playwright
 allure-python-commons
+pytest-timeout

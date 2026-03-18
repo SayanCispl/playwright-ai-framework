@@ -46,15 +46,25 @@ jobs:
       - name: Run tests
         run: pytest --browser=${{ matrix.browser }} --alluredir=reports/
 
-      # Step 6: Upload Allure results as artifact
+      # Step 6: Upload Allure results as artifact (even on failure)
       - name: Upload Allure results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results-${{ matrix.browser }}
           path: reports/
 
+      # Step 7: Upload failure screenshots (if any)
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: screenshots/
+
   merge-and-publish:
     # This job runs after all test jobs finish
+    if: always()
     needs: test
     runs-on: ubuntu-latest
 
@@ -68,6 +78,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: merged-results
+          pattern: allure-results-*
 
       # Step 3: Merge results into one folder
       - name: Merge Allure results
@@ -75,13 +86,21 @@ jobs:
           mkdir -p merged-results/all
           cp -r merged-results/*/* merged-results/all/ || true
 
-      # Step 4: Generate unified Allure HTML report
-      - name: Generate Allure HTML report
+      # Step 4: Install Allure CLI
+      - name: Install Allure CLI
         run: |
-          pip install allure-pytest allure-python-commons
-          allure generate merged-results/all -o allure-report --clean
+          sudo apt-get update -qq
+          sudo apt-get install -y default-jre
+          curl -o allure.tgz -Ls https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -zxvf allure.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
-      # Step 5: Deploy unified report to GitHub Pages
+      # Step 5: Generate unified Allure HTML report
+      - name: Generate Allure HTML report
+        run: allure generate merged-results/all -o allure-report --clean
+
+      # Step 6: Deploy unified report to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
