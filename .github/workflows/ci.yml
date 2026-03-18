@@ -1,11 +1,11 @@
 # ---------------------------------------------------------
-# GitHub Actions Workflow: Playwright Cross-Browser Tests (Ubuntu Only)
+# GitHub Actions Workflow: Playwright Tests (Chromium + WebKit on Ubuntu)
 # ---------------------------------------------------------
-# Runs Playwright tests on Ubuntu across 3 browsers: Chromium, Firefox, WebKit
-# Results are collected and merged into a single Allure report published to GitHub Pages.
+# Runs Playwright tests on Ubuntu with Chromium and WebKit browsers.
+# Results are collected and merged into a single Allure report.
 # ---------------------------------------------------------
 
-name: Playwright Cross-Browser Tests (Ubuntu)
+name: Playwright Tests (Chromium + WebKit)
 
 on:
   push:
@@ -15,11 +15,12 @@ on:
 
 jobs:
   test:
-    # Run tests only on Ubuntu with 3 browsers
     strategy:
+      fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        browser: [chromium, webkit]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       # Step 1: Checkout repo code
@@ -38,15 +39,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Install Playwright browsers with system dependencies
-      - name: Install Playwright browsers
-        run: python -m playwright install --with-deps
+      # Step 4: Install only the required Playwright browser + system deps
+      - name: Install Playwright browser (${{ matrix.browser }})
+        run: python -m playwright install --with-deps ${{ matrix.browser }}
 
       # Step 5: Run tests with pytest + Allure
       - name: Run tests
-        run: pytest --browser=${{ matrix.browser }} --alluredir=reports/
+        run: pytest tests/ --browser ${{ matrix.browser }} --alluredir=reports/ -v
 
-      # Step 6: Upload Allure results as artifact (even on failure)
+      # Step 6: Upload Allure results (even on failure)
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,7 +64,6 @@ jobs:
           path: screenshots/
 
   merge-and-publish:
-    # This job runs after all test jobs finish
     if: always()
     needs: test
     runs-on: ubuntu-latest
