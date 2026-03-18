@@ -1,65 +1,33 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Mar 18 07:23:47 UTC 2026","Wed Mar 18 07:23:47 UTC 2026","108","tests","test_api","","","","test_search_product[chromium-tshirt]","
+"passed","Wed Mar 18 07:39:28 UTC 2026","Wed Mar 18 07:39:34 UTC 2026","5506","tests","test_checkout","","","","test_checkout_desktop[chromium]",""
+"passed","Wed Mar 18 07:39:43 UTC 2026","Wed Mar 18 07:39:44 UTC 2026","100","tests","test_api","","","","test_search_product[chromium-tshirt]","
     Test Case: Search for products via API using keywords.
     Expected: Response code 200 and products list containing the keyword.
     "
-"passed","Wed Mar 18 07:32:55 UTC 2026","Wed Mar 18 07:32:55 UTC 2026","256","tests","test_api","","","","test_search_product[webkit-tshirt]","
-    Test Case: Search for products via API using keywords.
-    Expected: Response code 200 and products list containing the keyword.
-    "
-"passed","Wed Mar 18 07:32:48 UTC 2026","Wed Mar 18 07:32:51 UTC 2026","3490","tests","test_search","","","","test_search_blue_top[webkit]",""
-"passed","Wed Mar 18 07:23:41 UTC 2026","Wed Mar 18 07:23:44 UTC 2026","2866","tests","test_search","","","","test_search_blue_top[chromium]",""
-"passed","Wed Mar 18 07:32:28 UTC 2026","Wed Mar 18 07:32:28 UTC 2026","271","tests","test_api","","","","test_search_product[webkit-top]","
-    Test Case: Search for products via API using keywords.
-    Expected: Response code 200 and products list containing the keyword.
-    "
-"passed","Wed Mar 18 07:32:27 UTC 2026","Wed Mar 18 07:32:27 UTC 2026","160","tests","test_api","","","","test_get_products_list[webkit]","
-    Test Case: Verify that the products list API returns status 200
-    and contains a 'products' key in the JSON response.
-    "
-"passed","Wed Mar 18 07:32:14 UTC 2026","Wed Mar 18 07:32:21 UTC 2026","7102","tests","test_add_to_cart","","","","test_add_to_cart[webkit]",""
-"passed","Wed Mar 18 07:23:44 UTC 2026","Wed Mar 18 07:23:47 UTC 2026","2962","tests","test_search","","","","test_search_non_existent_product[chromium]",""
-"passed","Wed Mar 18 07:23:36 UTC 2026","Wed Mar 18 07:23:38 UTC 2026","2431","tests","test_login","","","","test_login[chromium]",""
-"passed","Wed Mar 18 07:23:23 UTC 2026","Wed Mar 18 07:23:23 UTC 2026","103","tests","test_api","","","","test_verify_login[chromium]","
+"passed","Wed Mar 18 07:39:34 UTC 2026","Wed Mar 18 07:39:36 UTC 2026","2142","tests","test_login","","","","test_login[chromium]",""
+"passed","Wed Mar 18 07:39:38 UTC 2026","Wed Mar 18 07:39:40 UTC 2026","2535","tests","test_search","","","","test_search_blue_top[chromium]",""
+"passed","Wed Mar 18 07:39:22 UTC 2026","Wed Mar 18 07:39:22 UTC 2026","86","tests","test_api","","","","test_verify_login[chromium]","
     Test Case: Verify login API with valid credentials.
     Expected: Response code 200 and message 'User exists!'.
     "
-"passed","Wed Mar 18 07:23:23 UTC 2026","Wed Mar 18 07:23:23 UTC 2026","246","tests","test_api","","","","test_register_user[chromium]","
-    Test Case: Register a new user via API.
-    Expected: Response code 200/201 and message 'User created!' or 'already exists'.
-    "
-"passed","Wed Mar 18 07:32:27 UTC 2026","Wed Mar 18 07:32:27 UTC 2026","110","tests","test_api","","","","test_register_user[webkit]","
-    Test Case: Register a new user via API.
-    Expected: Response code 200/201 and message 'User created!' or 'already exists'.
-    "
-"passed","Wed Mar 18 07:23:22 UTC 2026","Wed Mar 18 07:23:23 UTC 2026","323","tests","test_api","","","","test_get_products_list[chromium]","
+"passed","Wed Mar 18 07:39:36 UTC 2026","Wed Mar 18 07:39:38 UTC 2026","1934","tests","test_login","","","","test_login_desktop[chromium]",""
+"passed","Wed Mar 18 07:39:17 UTC 2026","Wed Mar 18 07:39:22 UTC 2026","4174","tests","test_add_to_cart","","","","test_add_to_cart_desktop[chromium]",""
+"passed","Wed Mar 18 07:39:22 UTC 2026","Wed Mar 18 07:39:22 UTC 2026","208","tests","test_api","","","","test_get_products_list[chromium]","
     Test Case: Verify that the products list API returns status 200
     and contains a 'products' key in the JSON response.
     "
-"passed","Wed Mar 18 07:32:56 UTC 2026","Wed Mar 18 07:32:56 UTC 2026","253","tests","test_api","","","","test_search_product[webkit-jean]","
+"passed","Wed Mar 18 07:39:22 UTC 2026","Wed Mar 18 07:39:22 UTC 2026","78","tests","test_api","","","","test_register_user[chromium]","
+    Test Case: Register a new user via API.
+    Expected: Response code 200/201 and message 'User created!' or 'already exists'.
+    "
+"passed","Wed Mar 18 07:39:44 UTC 2026","Wed Mar 18 07:39:44 UTC 2026","87","tests","test_api","","","","test_search_product[chromium-jean]","
     Test Case: Search for products via API using keywords.
     Expected: Response code 200 and products list containing the keyword.
     "
-"passed","Wed Mar 18 07:23:24 UTC 2026","Wed Mar 18 07:23:30 UTC 2026","6207","tests","test_checkout","","","","test_full_checkout_flow[chromium]",""
-"passed","Wed Mar 18 07:32:27 UTC 2026","Wed Mar 18 07:32:28 UTC 2026","113","tests","test_api","","","","test_verify_login[webkit]","
-    Test Case: Verify login API with valid credentials.
-    Expected: Response code 200 and message 'User exists!'.
-    "
-"passed","Wed Mar 18 07:23:13 UTC 2026","Wed Mar 18 07:23:18 UTC 2026","5073","tests","test_add_to_cart","","","","test_add_to_cart[chromium]",""
-"passed","Wed Mar 18 07:32:21 UTC 2026","Wed Mar 18 07:32:27 UTC 2026","5669","tests","test_add_to_cart","","","","test_add_to_cart_desktop[webkit]",""
-"passed","Wed Mar 18 07:32:42 UTC 2026","Wed Mar 18 07:32:45 UTC 2026","2379","tests","test_login","","","","test_login[webkit]",""
-"passed","Wed Mar 18 07:32:45 UTC 2026","Wed Mar 18 07:32:48 UTC 2026","2647","tests","test_login","","","","test_login_desktop[webkit]",""
-"passed","Wed Mar 18 07:23:23 UTC 2026","Wed Mar 18 07:23:23 UTC 2026","264","tests","test_api","","","","test_search_product[chromium-top]","
+"passed","Wed Mar 18 07:39:13 UTC 2026","Wed Mar 18 07:39:17 UTC 2026","4518","tests","test_add_to_cart","","","","test_add_to_cart[chromium]",""
+"passed","Wed Mar 18 07:39:40 UTC 2026","Wed Mar 18 07:39:43 UTC 2026","2937","tests","test_search","","","","test_search_non_existent_product[chromium]",""
+"passed","Wed Mar 18 07:39:22 UTC 2026","Wed Mar 18 07:39:22 UTC 2026","118","tests","test_api","","","","test_search_product[chromium-top]","
     Test Case: Search for products via API using keywords.
     Expected: Response code 200 and products list containing the keyword.
     "
-"passed","Wed Mar 18 07:32:52 UTC 2026","Wed Mar 18 07:32:55 UTC 2026","3293","tests","test_search","","","","test_search_non_existent_product[webkit]",""
-"passed","Wed Mar 18 07:23:38 UTC 2026","Wed Mar 18 07:23:41 UTC 2026","2378","tests","test_login","","","","test_login_desktop[chromium]",""
-"passed","Wed Mar 18 07:32:28 UTC 2026","Wed Mar 18 07:32:35 UTC 2026","6900","tests","test_checkout","","","","test_full_checkout_flow[webkit]",""
-"passed","Wed Mar 18 07:23:47 UTC 2026","Wed Mar 18 07:23:47 UTC 2026","242","tests","test_api","","","","test_search_product[chromium-jean]","
-    Test Case: Search for products via API using keywords.
-    Expected: Response code 200 and products list containing the keyword.
-    "
-"passed","Wed Mar 18 07:32:35 UTC 2026","Wed Mar 18 07:32:42 UTC 2026","6991","tests","test_checkout","","","","test_checkout_desktop[webkit]",""
-"passed","Wed Mar 18 07:23:18 UTC 2026","Wed Mar 18 07:23:22 UTC 2026","4662","tests","test_add_to_cart","","","","test_add_to_cart_desktop[chromium]",""
-"passed","Wed Mar 18 07:23:30 UTC 2026","Wed Mar 18 07:23:36 UTC 2026","6158","tests","test_checkout","","","","test_checkout_desktop[chromium]",""
+"passed","Wed Mar 18 07:39:22 UTC 2026","Wed Mar 18 07:39:28 UTC 2026","5768","tests","test_checkout","","","","test_full_checkout_flow[chromium]",""
